@@ -28,7 +28,7 @@ a,p
 }
 #left-col, #right-col
 {
-	position: relative;
+	
 	float: left;
    height: 90%;
 
@@ -49,15 +49,23 @@ a,p
 	margin: 0px auto;
 	height: 100%;
 	overflow: auto;
+	border: 1px solid #efefef;
 }
-.greyback
+.greyback , .whiteback
 {
 	border: 1px solid black;
 	padding: 5px;
-	background: #efefef;
 	margin: 0px auto;
 	margin-top: 2px;
 	overflow:auto;
+}
+.greyback
+{
+	background: #efefef;
+}
+.whiteback
+{
+	background: white;
 }
  .white-invitation,.grey-invitation
 {

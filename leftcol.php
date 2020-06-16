@@ -1,5 +1,5 @@
 <div id="left-col-container">
-	<a href="newinvitation2.php">
+	<a href="newinvitation.php">
 	<div  style="cursor: pointer;" class="whiteback">
 		<p align="center">
 			Create New Invitation

@@ -2,7 +2,7 @@
 session_start();
 if(isset($_SESSION['username']))
 {
-         
+         echo '<a href="logout.php"> LogOut</a>'; 
 }
 ?>
 <!DOCTYPE html>
@@ -11,7 +11,6 @@ if(isset($_SESSION['username']))
 	<?php
    require_once ("style.php");
 	?>
-	
 </style>
 <body>
 <div id="container">
@@ -19,7 +18,7 @@ if(isset($_SESSION['username']))
 		<?php
 
         echo $_SESSION['username'];
-        echo "<a style = "float:right; color:white;" href="logout.php">Log Out</a>";
+       // echo "<a  id="xy" href="logout.php">Log Out</a>";
 		?>
 	</div>
 	<div id="left-col">

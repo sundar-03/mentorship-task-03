@@ -1,34 +1,66 @@
 <?php
 require_once ("connection.php");
+if(isset($_POST['respond']))
+{
+     $x=$_POST['sended'];
+     $y=$_SESSION['username'];
+     $z=$_POST['feedback'];
+     $date=date("Y-m-d h:i:sa");
+       $q="INSERT INTO feedback(sender_name,receiver_name,status,date_time)  VALUES ('$x','$y','$z','$date') ";
+       $r=mysqli_query($con,$q);
+       if(!$r)
+       {
+       	echo ("Connection failed  ".mysqli_error($con));
+       }
+}
 ?>
-<style>
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
 	#header
 	{
-		width: 60px;
-		height: 40px;
+		
+		width: 180px;
+		height: 90px;
 		text-align:center;
 		word-wrap:break-word;
 		vertical-align:middle;
 		line-height:90px;
+		color: black;
+		background-color:#00FF7F;
+		padding: 0px;
 	}
 	#middle
 	{
-		width: 60px;
-		height: 60px;
+		position: relative;
+		bottom: 12px;
+		width: 180px;
+		height: 90px;
 		text-align:center;
+	
          word-wrap:break-word;
          font-size: 7px;
+         color: black;
+         background-color:#00FF7F;
 
 	}
 	#footer
 	{
-		width: 60px;
-		height: 40px;
+		position: relative;
+		bottom: 24px;
+		background-color:#00FF7F;
+		width: 180px;
+		height: 90px;
+		text-align:center;
 		word-wrap:break-word;
 		vertical-align:middle;
 		line-height:90px;
+		color: black;
 	}
 </style>
+</head>
+<body>
 <div id="right-col-container">
 			
 				<?php
@@ -36,35 +68,21 @@ require_once ("connection.php");
 				$no_message=false;
 				if(isset($_GET['user']))
 				{
-					$_GET['user']=$_GET['user'];
+					 $_GET['user']=$_GET['user'];
 				}
 				else
 				{
-                      $q='SELECT 'sender_name', 'receiver_name' FROM 'messages' WHERE 'sender_name'="'.$_SESSION['username'].'"
-                       OR 'receiver_name' "'.$_SESSION['username'].'" ORDER BY 'date_time' DESC LIMIT 1  ';
+                      $q="SELECT sender_name, receiver_name FROM messages WHERE sender_name='".$_SESSION['username']."'
+                       OR receiver_name ='".$_SESSION['username']."' ORDER BY date_time DESC LIMIT 1  ";
                        $r = mysqli_query($con,$q);
                        if($r)
                        {
-                               if(mysqli_num_rows($r)>0)
+                               if(mysqli_num_rows($r) == 0)
                                {
-                                     while($row=mysqli_fetch_assoc($r))
-                                     {
-                                     	$sender_name=$row['sender_name'];
-                                     	$receiver_name=$row['receiver_name'];
-                                     	if($_SESSION['username']==$sender_name)
-                                     	{
-                                     		$_GET['user']=$receiver_name;
-                                     	}
-                                     	else{
-                                     		$_GET['user']=$sender_name;
-                                     	}
-                                     }
-                               }
-                               else
-                               {
-                               	echo "no invitation from you";
+                                   echo "no invitation from you";
                                	$no_message = true;
                                }
+                         
                        }
                        else
                        {
@@ -73,37 +91,28 @@ require_once ("connection.php");
 
 				}
 				if($no_message == false){
-                           $q='SELECT * FROM 'messages' WHERE 'sender_name'="'.$_SESSION['username'].'" AND 'receiver_name'="'.$_GET['user'].'"        
+                           $q="SELECT * FROM messages WHERE sender_name='".$_SESSION['username']."'         
                        OR 
-                       'sender_name'="'.$_GET['user'].'" AND 'receiver_name'="'.$_SESSION['username'].'" ';
+                        receiver_name='".$_SESSION['username']."' ORDER BY date_time DESC ";
                        $r=mysqli_query($con,$q);
                        if($r)
                        {
-                           while ($row = mysqli_fetch_assoc($r)) {
+                           while ($row = mysqli_fetch_assoc($r)) {   
                            	$sender_name=$row['sender_name'];
                            	$receiver_name=$row['receiver_name'];
                            	$footertext=$row['footertext'];
 							   $middletext=$row['middletext'];
 							   $headertext=$row['headertext'];
-							   $headercolor=$row['color1'];
-							   $middlecolor=$row['color2'];
-							   $footercolor=$row['color3'];
+							  
 							   
 
                            	if ($sender_name == $_SESSION['username']) {
-                           		?>
+                           	         ?>
                            		<div class="grey-invitation">
 					                   <a href="#">
 						             Me
 					              </a>
-					              <script type="text/javascript">
-					              	var headercolor="<?php echo $headercolor ?>";
-					              	document.getElementById("header").style.backgroundColor = headercolor;
-					              	var middlecolor="<?php echo $headercolor ?>";
-					              	document.getElementById("middle").style.backgroundColor = middlecolor;
-					              	var footercolor="<?php echo $footercolor ?>";
-					              	document.getElementById("footer").style.backgroundColor = footercolor;
-					              </script>
+					             
 					              <div id="header">
 					              	<p>
 					              		<?php echo $headertext;?>
@@ -119,23 +128,20 @@ require_once ("connection.php");
 					              	<?php echo $footertext;?>
 					              </p>
 					              </div>
+
+					              <?php
+                                    echo "sended to ".$receiver_name;
+					              ?>
 				                </div>
-                           		<?php
+                           		   <?php
+                           	  
                            	  }
-                           	  else{
-                           		?>
+                           	  else {  ?>
                            	                    <div class="white-invitation">
 					                         <a href="#">
 						                  <?php echo $sender_name;    ?>
 					                </a>
-					                <script type="text/javascript">
-					              	var headercolor="<?php echo $headercolor ?>";
-					              	document.getElementById("header").style.backgroundColor = headercolor;
-					              	var middlecolor="<?php echo $headercolor ?>";
-					              	document.getElementById("middle").style.backgroundColor = middlecolor;
-					              	var footercolor="<?php echo $footercolor ?>";
-					              	document.getElementById("footer").style.backgroundColor = footercolor;
-					              </script>
+					                
 					                <div id="header"  >
 					              	<p>
 					              		<?php echo $headertext;?>
@@ -151,16 +157,36 @@ require_once ("connection.php");
 					              	<?php echo $footertext;?>
 					              </p>
 					              </div>
+					              
+					             
+					              
+					              <form method="post" >
+				                    	<select name="feedback">
+									     <option value="accept">Accept</option>
+									    <option value="reject">Reject</option>
+				                    	</select>
+				                    	<br>
+				                    	<?php
+                                          echo '<input type="text" name="sended" value="'.$sender_name.'" readonly />      ';
+				                    	?>
+				                    	<br>
+				                    	<input type="submit"  name="respond" value="respond" >
+				                    </form>
+				                
 				                    </div>
-			                        
+
+			                       <?php 
                                  }
                            }
                        }
                        else
                        {
-                       	echo "query problem";
+                       	echo ("connectiom failed  ".mysqli_error($con));
                        }
                    }
 				?>
 				
 			</div>
+
+</body>
+</html>
